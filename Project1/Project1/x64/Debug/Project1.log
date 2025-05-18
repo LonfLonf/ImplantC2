@@ -1,0 +1,5 @@
+﻿  Assembling reader.asm...
+reader.asm(13): warning A6004: procedure argument or local not referenced : stdcall
+  main.cpp
+C:\Users\firey\source\repos\ImplantC2\Project1\Project1\main.cpp(27,25): warning C4267: '=': conversion from 'size_t' to 'DWORD', possible loss of data
+  Project1.vcxproj -> C:\Users\firey\source\repos\ImplantC2\Project1\x64\Debug\Project1.exe

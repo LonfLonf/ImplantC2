@@ -1,6 +1,5 @@
 ﻿  main.cpp
-C:\Users\firey\source\repos\ImplantC2\Project1\Project1\main.cpp(27,25): warning C4267: '=': conversion from 'size_t' to 'DWORD', possible loss of data
-C:\Users\firey\source\repos\ImplantC2\Project1\Project1\main.cpp(103,50): warning C4129: 'M': unrecognized character escape sequence
-C:\Users\firey\source\repos\ImplantC2\Project1\Project1\main.cpp(111,96): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
-C:\Users\firey\source\repos\ImplantC2\Project1\Project1\main.cpp(121,1): warning C4715: 'Persistence': not all control paths return a value
-  Project1.vcxproj -> C:\Users\firey\source\repos\ImplantC2\Project1\x64\Debug\Project1.exe
+C:\Users\firey\source\repos\ImplantC2\Project1\Project1\main.cpp(31,25): warning C4267: '=': conversion from 'size_t' to 'DWORD', possible loss of data
+C:\Users\firey\source\repos\ImplantC2\Project1\Project1\main.cpp(107,50): warning C4129: 'M': unrecognized character escape sequence
+C:\Users\firey\source\repos\ImplantC2\Project1\Project1\main.cpp(115,96): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
+C:\Users\firey\source\repos\ImplantC2\Project1\Project1\main.cpp(125,1): warning C4715: 'Persistence': not all control paths return a value
